@@ -1,0 +1,4080 @@
+{
+  "name": "Full Conversational Workflow-AI Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Haven Wellness Appointment Booking",
+        "formDescription": "Fill out this form to book a consultation. We'll reach out to you via email to finalize our appointment.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Full name"
+            },
+            {
+              "fieldLabel": "Phone Number",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email"
+            },
+            {
+              "fieldLabel": "Service Interested in",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Massage therapy"
+                  },
+                  {
+                    "option": "Facial treatment"
+                  },
+                  {
+                    "option": "Body treatment"
+                  },
+                  {
+                    "option": "Manicure & Pedicure"
+                  },
+                  {
+                    "option": "Chat with Customer Agent"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -960,
+        624
+      ],
+      "id": "8fdd6dd1-44c1-4bab-824d-e4b894ae39cc",
+      "name": "On form submission",
+      "webhookId": "2b76f566-87e8-49a5-a5b6-18a9d44b1efd"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        768,
+        592
+      ],
+      "id": "30eb6fbb-950f-42af-a1ca-b37202981f64",
+      "name": "Wait1",
+      "webhookId": "79a7caf8-09c9-47c5-880f-543c661bf8a9"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": "Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Email",
+              "lookupValue": "={{ $('On form submission').item.json.Email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        960,
+        592
+      ],
+      "id": "ce8fbca9-aebd-4814-ae21-d54060946d92",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get row(s) in sheet1').item.json.Email }}",
+        "subject": "=Follow-up: Your interest in {{ $('Get row(s) in sheet1').item.json['Service Interested in'] }}",
+        "emailType": "text",
+        "message": "=Hello {{ $('Split names').item.json['First name'] }},\n\nWe're following up on your interest in {{ $('Get row(s) in sheet1').item.json['Service Interested in'] }}. Our team is available and eager to receive you. Kindly let us know if you'd like us to proceed. \n\nBest Regards,\nHaven Wellness",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1600,
+        576
+      ],
+      "id": "8e006fe4-3353-4cf8-9d59-9e3bf0a72e10",
+      "name": "Send a message5",
+      "webhookId": "3011a7a2-73f1-4f7f-a6fa-372ebe78adfb"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": "Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Get row(s) in sheet1').item.json.Email }}",
+            "Response Status": "={{ $('Change details like status to sent, follow up needed to no').item.json['Response Status'] }}",
+            "Follow_up_needed": "={{ $('Change details like status to sent, follow up needed to no').item.json['Follow_up_ needed'] }}",
+            "Follow_up_sent_at": "={{ $('Change details like status to sent, follow up needed to no').item.json.Follow_up_sent_at }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Service Interested in",
+              "displayName": "Service Interested in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response Status",
+              "displayName": "Response Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_needed",
+              "displayName": "Follow_up_needed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_at",
+              "displayName": "Created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_sent_at",
+              "displayName": "Follow_up_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1824,
+        576
+      ],
+      "id": "80b1c1c0-2dcd-4cb6-bce2-1628348518b6",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "q": "Subject: Re: "
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -912,
+        1392
+      ],
+      "id": "cb489b5a-ad9e-42de-8809-1dacca6caf8f",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qn1tjsNd1vhrjYPF",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "304c03bb-51ef-4e98-ae6a-9887abeb63b7",
+              "name": "Sender_email",
+              "value": "={{ $json.From.match(/<(.+)>/)[1]}}",
+              "type": "string"
+            },
+            {
+              "id": "7a3cab46-aec2-415a-b287-7a064c21da09",
+              "name": "Reply_content",
+              "value": "={{ $json.snippet.split(/On .*wrote:|From:|>+/i)[0].trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "a7e36c0a-435c-4421-8f95-960ad12150cb",
+              "name": "Reply_subject",
+              "value": "={{ $json.Subject }}",
+              "type": "string"
+            },
+            {
+              "id": "e35ba7ff-59c8-4903-bcf5-f2fedc6f0137",
+              "name": "Reply_timestamp",
+              "value": "={{ $now.format('yyyy-MM-dd hh-mm-ss') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -704,
+        1392
+      ],
+      "id": "bc3d69a5-9026-4fdb-bc1c-5ffa97403f5b",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Email",
+              "lookupValue": "={{ $json.Sender_email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -512,
+        1392
+      ],
+      "id": "c66605ca-ae74-4cee-9c52-039289802538",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $json.Email.toLowerCase().trim() }}",
+            "Response Status": "Responded",
+            "Follow_up_needed": "No"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Service Interested in",
+              "displayName": "Service Interested in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response Status",
+              "displayName": "Response Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_needed",
+              "displayName": "Follow_up_needed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_at",
+              "displayName": "Created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_sent_at",
+              "displayName": "Follow_up_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -304,
+        1392
+      ],
+      "id": "dffa229f-da9b-4353-8102-12ab99ced4cb",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "phoneNumber": "+2347036455111",
+        "message": "=📩 New Reply Received!\nName: {{ $('Get row(s) in sheet').item.json[\"Full name\"] }}\nService: {{ $('Get row(s) in sheet').item.json[\"Service Interested in\"] }}\nEmail: {{ $('Get row(s) in sheet').item.json.Email }} \nTime: {{ $now.format('yyyy-MM-dd hh:mm:ss') }} "
+      },
+      "type": "n8n-nodes-syncmate.whatsAuto",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        1168
+      ],
+      "id": "1fcbd1ff-f33e-4d01-bc33-efcfee45e3be",
+      "name": "Send a notification",
+      "credentials": {
+        "assistroTokenApi": {
+          "id": "oibwRnCMqzatNuPv",
+          "name": "Assistro Token account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        4128,
+        720
+      ],
+      "id": "372f6245-9cc6-4f95-80e2-f4c7fd997032",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1635872189,
+          "mode": "list",
+          "cachedResultName": "Error Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=1635872189"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Workflow": "Assignment 5",
+            "Timestamp": "={{ $now.format('yyyy-MM-dd hh:mm:ss') }}",
+            "Error Message": "={{ $json.execution.error.message }}",
+            "Lead Email": "={{ $json.sender_email ?? 'unknown' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Workflow",
+              "displayName": "Workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Error Message",
+              "displayName": "Error Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead Email",
+              "displayName": "Lead Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4384,
+        720
+      ],
+      "id": "fa2dc06a-9cdc-425d-b815-00d3743166ca",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "owofadejutoluwani@gmail.com",
+        "subject": " ⚠️Workflow Error- Assignment 5",
+        "emailType": "text",
+        "message": "=Something went wrong in your Assignment 5 workflow.     \nError: {{ $json.execution.error.message }}   \nTime: {{ $now.format('yyyy-MM-dd hh-mm-ss')}}\nCheck your Error Log sheet.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        4640,
+        720
+      ],
+      "id": "e91e9862-ee9d-43b1-a79b-75ce15ecf3e8",
+      "name": "Send a message6",
+      "webhookId": "b2c6656b-b9c5-4334-b195-838071023edd"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3ca53ba8-0e1e-45d0-bc87-ea01b5bc01f1",
+              "leftValue": "={{ $json[\"Phone Number\"] }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -736,
+        624
+      ],
+      "id": "a1eaa84a-0403-475c-bc24-f1462a78e7e4",
+      "name": "Is phone number included?"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d622ef44-a0f5-4843-bbbd-d1bcfec4908a",
+              "name": "First name",
+              "value": "={{ $json[\"Full name\"].split(\" \").first( )}}",
+              "type": "string"
+            },
+            {
+              "id": "2c6c012d-9aaf-4845-b74f-cde0897bb5f9",
+              "name": "Last name",
+              "value": "={{ $json[\"Full name\"].split(\" \").last() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -320,
+        608
+      ],
+      "id": "3b4f824e-1d1d-4da6-b7b0-4747f326cfa1",
+      "name": "Split names"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[\"Service Interested in\"] }}",
+                    "rightValue": "Chat with Customer Agent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "dd649c3c-a07b-4707-8e83-4738904e6d82"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Chat with Customer Agent"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "fbf390c9-79fa-4c0a-82b1-156d1d6a86ea",
+                    "leftValue": "={{ $json[\"Service Interested in\"] }}",
+                    "rightValue": "Massage therapy",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Massage therapy"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "1561cdb9-73f9-435b-a44e-7d99b06e03c6",
+                    "leftValue": "={{ $json[\"Service Interested in\"] }}",
+                    "rightValue": "Facial treatment",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Facial treatment"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c6c15387-ea59-4f81-a0ad-4592b9db93c6",
+                    "leftValue": "={{ $json[\"Service Interested in\"] }}",
+                    "rightValue": "Body treatment",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Body treatment"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "f83da8ee-957b-4020-835e-69aac05adad3",
+                    "leftValue": "={{ $json[\"Service Interested in\"] }}",
+                    "rightValue": "Manicure & Pedicure",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Manicure & Pedicure"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -64,
+        560
+      ],
+      "id": "33413420-8442-49c3-becb-414ecc3522f4",
+      "name": "Route requests"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "763effd2-0f1b-43ba-8ae5-80c06ca542fe",
+              "leftValue": "={{ $json[\"Response Status\"] }}",
+              "rightValue": "New Lead",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1152,
+        592
+      ],
+      "id": "e6441821-fed0-4e44-9b68-610b3b01b3c7",
+      "name": "Is status = new lead"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7a6466d5-9e39-40bd-ac22-6e0c41046a4b",
+              "name": "Response Status",
+              "value": "Follow-up sent",
+              "type": "string"
+            },
+            {
+              "id": "92881121-2027-4314-ae2c-1b836b7d1bf7",
+              "name": "Follow_up_ needed",
+              "value": "No",
+              "type": "string"
+            },
+            {
+              "id": "fcf79e59-083f-4901-a591-a6bb1cb8c813",
+              "name": "Follow_up_sent_at",
+              "value": "={{ $now.format('yyyy-MM-dd hh-mm-ss') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1392,
+        576
+      ],
+      "id": "0d2b8659-2182-41e4-8c31-6af257c49d70",
+      "name": "Change details like status to sent, follow up needed to no"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Split names').item.json.Email }}",
+            "Response Status": "Responded",
+            "Follow_up_needed": "No",
+            "Conversation Status": "Chat initiated",
+            "Last Contact": "={{ $now.format('yyyy-MM-dd hh:mm:ss') }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Service Interested in",
+              "displayName": "Service Interested in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response Status",
+              "displayName": "Response Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_needed",
+              "displayName": "Follow_up_needed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_at",
+              "displayName": "Created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_sent_at",
+              "displayName": "Follow_up_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Contact",
+              "displayName": "Last Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Conversation Status",
+              "displayName": "Conversation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Booking Intent",
+              "displayName": "Booking Intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Date",
+              "displayName": "Appointment Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Time",
+              "displayName": "Appointment Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        64
+      ],
+      "id": "03b135d0-bf81-4b69-ba38-3e82be9bc459",
+      "name": "Update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Split names').item.json.Email }}",
+        "subject": "Hello from Haven Wellness - How can we help?",
+        "emailType": "text",
+        "message": "=Hello {{ $('Split names').item.json['First name'] }},\nthank you for reaching out to\nHaven Wellness. You have selected to\nchat with our customer agent.\n\nPlease reply to this email with\nyour question or request and we\nwill get back to you shortly.\n\nBest regards,\nHaven Wellness",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        80
+      ],
+      "id": "7ae5ba48-e875-464e-a844-fe5e2610ce3c",
+      "name": "Chat With Customer Agent",
+      "webhookId": "7648b13d-bfa9-453a-98cb-a60a195b4b62",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json.Email }}",
+        "subject": "Appointment Confirmation",
+        "emailType": "text",
+        "message": "=Hello {{ $('Split names').item.json[\"First name\"] }},\n\nThank you for your interest in our massage therapy service. We'll be in touch with you shortly.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        288
+      ],
+      "id": "48eec69b-e8d4-4251-9fd9-435aaf7cb9d8",
+      "name": "Email: Massage therapy",
+      "webhookId": "ee09fb31-394d-49e4-afdb-e33f59ea4a7d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qn1tjsNd1vhrjYPF",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json.Email }}",
+        "subject": "Appointment Confirmation",
+        "emailType": "text",
+        "message": "=Hello {{ $json[\"First name\"] }},\n\nThank you for your interest in our manicure & pedicure service. We'll be in touch with you shortly.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        864
+      ],
+      "id": "b8ea3771-c54c-4f7f-a66a-116902582c99",
+      "name": "Email: Manicure & Pedicure",
+      "webhookId": "28381366-5627-498a-93fb-2072573eedf5"
+    },
+    {
+      "parameters": {
+        "phoneNumber": "+2347036455111",
+        "message": "=💬 New Chat Initiated!\nName: {{ $('Split names').item.json['Full name'] }}\nService: {{ $('Split names').item.json['Service Interested in'] }}\nEmail: {{ $('Split names').item.json.Email }}\nTime: {{ $now.format('yyyy-MM-dd hh:mm:ss') }}"
+      },
+      "type": "n8n-nodes-syncmate.whatsAuto",
+      "typeVersion": 1,
+      "position": [
+        752,
+        64
+      ],
+      "id": "0ac1ea49-b3ae-4427-892e-88b1beb30667",
+      "name": "Send a notification1",
+      "credentials": {
+        "assistroTokenApi": {
+          "id": "oibwRnCMqzatNuPv",
+          "name": "Assistro Token account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e528bfa7-ae3a-4385-8dbe-69e3ebd74091",
+              "leftValue": "={{ Object.keys($input.first().json) .length > 0 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        192,
+        1360
+      ],
+      "id": "ce470219-d7e6-4361-a91f-364a5924e05c",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "/const allMessages = $input.all();\nconst last10 = allMessages.slice(-10);\nreturn last10;/ "
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        1232
+      ],
+      "id": "df9ef464-0059-41df-b2e4-1537d54916bf",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "31833bf5-68e0-48ff-8e83-ff3d9e416d57",
+              "name": "chat_history",
+              "value": "\" \"",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        1472
+      ],
+      "id": "671bd9ad-6862-4d36-836a-dfdba2b94276",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        640,
+        1376
+      ],
+      "id": "d46eaa1c-d3d3-447d-b07e-a92aa90dcb4d",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 490465066,
+          "mode": "list",
+          "cachedResultName": "Chat History",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=490465066"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Lead_email",
+              "lookupValue": "={{ $('Edit Fields').item.json.Sender_email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -16,
+        1376
+      ],
+      "id": "1af1ecfd-3da5-4db8-849f-69925ff24e12",
+      "name": "Fetch Chat History",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allMessages = $input.all();\n\nconst chatHistory = allMessages\n.filter(msg => msg.json.sender !== undefined)\n.map(msg => msg.json.sender + ': ' + msg.json.message_content)\n.join('\\n');\n\nreturn [\n  {\n    json: {\n     chat_history: chatHistory\n   }\n  } \n]; "
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        848,
+        1376
+      ],
+      "id": "2cf144ec-7104-4166-80f9-bfbc494e8470",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8cbefa91-7b35-4642-ba68-c6c8d87e9174",
+              "name": "First_name",
+              "value": "={{ $('Get row(s) in sheet').item.json[\"Full name\"].split(' ')[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "1d21da7a-5082-4fa4-a443-5699e265a892",
+              "name": "Last_name",
+              "value": "={{ $('Get row(s) in sheet').item.json[\"Full name\"].split(' ')[1] }}",
+              "type": "string"
+            },
+            {
+              "id": "d88459eb-867a-41cd-b747-c1f9987bf097",
+              "name": "Email",
+              "value": "={{ $('Get row(s) in sheet').item.json.Email }}",
+              "type": "string"
+            },
+            {
+              "id": "d9440238-b880-4785-93b1-d52cd59eabc2",
+              "name": "Service Interested in",
+              "value": "={{ $('Get row(s) in sheet').item.json[\"Service Interested in\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "24a49652-9b54-4693-9e0f-21a92af10975",
+              "name": "Sender_email",
+              "value": "={{ $('Edit Fields').item.json.Sender_email }}",
+              "type": "string"
+            },
+            {
+              "id": "58820d3e-0a74-42be-bdd8-ea4c78860e1c",
+              "name": "Reply_content",
+              "value": "={{ $('Edit Fields').item.json.Reply_content }}",
+              "type": "string"
+            },
+            {
+              "id": "9af68a8b-f6cd-495d-8321-ef8c6ed5d875",
+              "name": "Reply_subject",
+              "value": "={{ $('Edit Fields').item.json.Reply_subject.replace(/^(Re:\\s*)*/i, '').trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "d0e8bcd1-2990-458c-a7e4-b370076e7df7",
+              "name": "chat_history",
+              "value": "={{ $json.chat_history }}",
+              "type": "string"
+            },
+            {
+              "id": "8a47445e-ef8e-458f-a610-87e1b9770977",
+              "name": "Service_context",
+              "value": "={{ $('Get row(s) in sheet').item.json[\"Service Interested in\"] ===\n'Chat with Customer Agent'\n? 'The customer has not selected a specific service yet. Help them find the right service based on the business context provided.'\n: 'The customer has selected the following service: ' + $('Get row(s) in sheet').item.json[\"Service Interested in\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "b1051b29-00b7-4861-a5a9-482dbd10cd65",
+              "name": "business_context",
+              "value": "=Haven Wellness is a premium spa and relaxation center dedicated to helping you unwind, recharge, and feel your best.\nOur services include:\n\nMassage Therapy: ₦10,000. Includes a full-body therapeutic massage tailored to relieve stress, ease muscle tension, and improve circulation.\n\nFacial Treatment: ₦8,000. Includes deep cleansing, exfoliation, and hydration to leave your skin refreshed, glowing, and rejuvenated.\n\nBody Treatment: ₦12,000. Includes body exfoliation and nourishing treatments designed to detoxify, smooth, and revitalize your skin.\n\nManicure & Pedicure: ₦6,000. Includes nail shaping, cuticle care, exfoliation, and polish for clean, well-groomed hands and feet.\n\nTo book an appointment, simply reply with your preferred date, time, and service, and we will confirm your booking within 24 hours.\nFor enquiries or bookings, contact us via:\nPhone: 080-123-45678\nEmail: havenwellness@gmail.com",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1056,
+        1376
+      ],
+      "id": "a9bf7bac-8b5b-4100-824e-c22f6c4ab148",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a helpful customer service agent for Haven Wellness, a spa business.\n\n {{ $json.Service_context }}\n\nYour job is to:\n1. Answer customer questions about\nour services using the business\ncontext provided below\n2. Help customers book appointments\nby collecting their preferred\ndate and time\n3. If the customer wants to book —\ninclude exactly this tag in your\nresponse: [BOOKING DETECTED]\n4. If the customer mentions a date\nand time for their appointment,\ninclude these tags:\n[APPOINTMENT DATE: the date\nthey mentioned]\n[APPOINTMENT TIME: the time\nthey mentioned]\n5. At the end of every response\ninclude exactly one of these\nsentiment tags:\n[SENTIMENT: positive]\n[SENTIMENT: neutral]\n[SENTIMENT: frustrated]\n[SENTIMENT: urgent]\n6. If you cannot answer a question\n— include exactly this tag:\n[ESCALATE]\n7. Always be professional, warm,\nand concise\n8. Never mention these tags to the\ncustomer — they are for internal\nuse only\n\nBusiness Context: {{ $json.business_context }}\nPrevious Conversation: {{ $json.chat_history }}\nUser message: {{ $json.Reply_content }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1280,
+        1376
+      ],
+      "id": "1c903085-fe29-4986-b303-2a50776e7170",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YTKBkl24e7oRTpNS",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a35d931e-b10e-4c33-8358-ba1471882899",
+              "name": "ai_response",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            },
+            {
+              "id": "3c9cfcf1-ea8b-4c80-a171-7deb53d4fc74",
+              "name": "booking_detected",
+              "value": "={{ $json.content.parts[0].text.includes('[BOOKING DETECTED]')\n? 'yes' : 'no' }}",
+              "type": "string"
+            },
+            {
+              "id": "131d1ba6-fb0f-4df2-be92-5ffdb311575f",
+              "name": "escalation_needed",
+              "value": "={{ $json.content.parts[0].text.includes('[ESCALATE]')\n? 'yes' : 'no' }}",
+              "type": "string"
+            },
+            {
+              "id": "c6e85dc8-47ff-4fd5-8410-731b4dd3cf23",
+              "name": "sentiment ",
+              "value": "={{ $json.content.parts[0].text.match(/\\[SENTIMENT: (.*?)\\]/)?.[1]\n?? 'neutral'  }}",
+              "type": "string"
+            },
+            {
+              "id": "92bd6a02-4df8-47fc-ba41-315c262c2c8b",
+              "name": "appointment_date ",
+              "value": "={{ $json.content.parts[0].text.match(/\\[APPOINTMENT DATE:(.*?)\\]/)?.[1] ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "cd679ab3-4405-4322-b31f-19aeae9def9d",
+              "name": "appointment_time",
+              "value": "={{ $json.content.parts[0].text.match(/\\[APPOINTMENT TIME:(.*?)\\]/)?.[1] ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "d2bedc27-97b3-4270-897a-6849e16a0b37",
+              "name": "clean_response",
+              "value": "={{ $json.content.parts[0].text.replace('[BOOKING DETECTED]', '').replace('[ESCALATE]', '').replace(/\\[SENTIMENT:.*?\\]/g, '').replace(/\\[APPOINTMENT DATE:.*?\\]/g, '')\n.replace(/\\[APPOINTMENT TIME:.*?\\]/g, '')\n.trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "38b94827-9098-43d6-88de-f9662dad2b22",
+              "name": "first_name",
+              "value": "={{ $('Edit Fields2').item.json.First_name }}",
+              "type": "string"
+            },
+            {
+              "id": "f6310f42-08fa-4068-af1e-7aee9fe88d34",
+              "name": "last_name",
+              "value": "={{ $('Edit Fields2').item.json.Last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "d298b776-4251-41d9-ae95-674f5ca2794e",
+              "name": "Email",
+              "value": "={{ $('Edit Fields2').item.json.Email }}",
+              "type": "string"
+            },
+            {
+              "id": "e1fce06f-1b2d-42a1-a688-c236c8a891a9",
+              "name": "Service",
+              "value": "={{ $('Edit Fields2').item.json['Service Interested in'] }}",
+              "type": "string"
+            },
+            {
+              "id": "894885ff-a10d-4a95-9902-aff16848a655",
+              "name": "sender_email",
+              "value": "={{ $('Edit Fields2').item.json.Sender_email }}",
+              "type": "string"
+            },
+            {
+              "id": "c7473400-d61e-4655-beb2-3c3dac7a78de",
+              "name": "reply_subject",
+              "value": "={{ $('Edit Fields2').item.json.Reply_subject }}",
+              "type": "string"
+            },
+            {
+              "id": "1fbbc9a4-e948-4f43-a7a3-7987f891a677",
+              "name": "reply_content",
+              "value": "={{ $('Edit Fields2').item.json.Reply_content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1600,
+        1376
+      ],
+      "id": "d773527a-4729-46cf-b07d-f523b8a0a331",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4c341a0c-2b9b-44f3-bb48-65f9fa522efb",
+              "leftValue": "={{ $json.clean_response !== undefined && $json.clean_response !== '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1808,
+        1376
+      ],
+      "id": "3274a13c-8509-4073-b5cb-0a40180b9f12",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields3').item.json.Email }}",
+        "subject": "=Re: {{ $('Edit Fields3').item.json.reply_subject }}",
+        "emailType": "text",
+        "message": "=Hello {{ $('Edit Fields2').item.json.First_name }}, thank you for your message.\nA human agent will follow up\nshortly.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2048,
+        1520
+      ],
+      "id": "bdc11de4-9ff8-42a0-bc7c-5bcfc14cc221",
+      "name": "Send fallback to customer",
+      "webhookId": "9e053979-ad31-4293-8174-2375d4aa3293",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qn1tjsNd1vhrjYPF",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumber": "+2347036455111",
+        "message": "=⚠️ AI failed to respond for {{ $('Edit Fields2').item.json.First_name }}\n{{ $('Edit Fields2').item.json.Email }}\nManual follow-up needed."
+      },
+      "type": "n8n-nodes-syncmate.whatsAuto",
+      "typeVersion": 1,
+      "position": [
+        2256,
+        1520
+      ],
+      "id": "1d8c49b5-d0e9-45b1-8124-172f2e1be93a",
+      "name": "Send a notification2",
+      "credentials": {
+        "assistroTokenApi": {
+          "id": "oibwRnCMqzatNuPv",
+          "name": "Assistro Token account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1635872189,
+          "mode": "list",
+          "cachedResultName": "Error Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=1635872189"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Workflow": "Assignment 5",
+            "Error Message": " AI response empty",
+            "Timestamp": "={{ $now.format('yyyy-MM-dd hh:mm:ss') }}",
+            "Lead Email": "={{ $('Edit Fields2').item.json.Email }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Workflow",
+              "displayName": "Workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Error Message",
+              "displayName": "Error Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead Email",
+              "displayName": "Lead Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2480,
+        1520
+      ],
+      "id": "0e0971fa-7b63-4291-990b-c7f8f6540216",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "cfe952a0-564a-42cd-b287-893ff3e17dec",
+              "leftValue": "={{ $('Edit Fields3').item.json.booking_detected === 'yes' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2016,
+        1264
+      ],
+      "id": "4308f5db-5d54-4c96-bac5-a1be95aff692",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Edit Fields3').item.json.Email }}",
+            "Conversation Status": "Booking requested",
+            "Booking Intent": "Yes",
+            "Appointment Date": "={{ $('Edit Fields3').item.json['appointment_date '] }}",
+            "Appointment Time": "={{ $('Edit Fields3').item.json.appointment_time }}",
+            "Last Contact": "={{ $now.format('yyyy-MM-dd hh:mm:ss') }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Service Interested in",
+              "displayName": "Service Interested in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response Status",
+              "displayName": "Response Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_needed",
+              "displayName": "Follow_up_needed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_at",
+              "displayName": "Created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_sent_at",
+              "displayName": "Follow_up_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Contact",
+              "displayName": "Last Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Conversation Status",
+              "displayName": "Conversation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Booking Intent",
+              "displayName": "Booking Intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Date",
+              "displayName": "Appointment Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Time",
+              "displayName": "Appointment Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2288,
+        1088
+      ],
+      "id": "8674733a-b888-4790-afd3-e9d9cdfec485",
+      "name": "Update row in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "phoneNumber": "+2347036455111",
+        "message": "=📅 Booking Request!\nName: {{ $('Edit Fields3').item.json.first_name }} {{ $('Edit Fields3').item.json.last_name }}\nService: {{ $('Edit Fields3').item.json.Service }}\nEmail: {{ $('Edit Fields3').item.json.Email }}\nDate: {{ $('Edit Fields3').item.json['appointment_date '] }}\nTime: {{ $('Edit Fields3').item.json.appointment_time }}\nMessage: {{ $('Edit Fields3').item.json.reply_content }}"
+      },
+      "type": "n8n-nodes-syncmate.whatsAuto",
+      "typeVersion": 1,
+      "position": [
+        2288,
+        1328
+      ],
+      "id": "3f135b33-239b-4ec0-bfb4-328c3a5844a5",
+      "name": "Send a notification3",
+      "credentials": {
+        "assistroTokenApi": {
+          "id": "oibwRnCMqzatNuPv",
+          "name": "Assistro Token account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2592,
+        1232
+      ],
+      "id": "a67b2303-40e3-4acf-bde7-8add2ae7dc4c",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0a9d5608-18af-4175-b8c1-9ee9e57444e9",
+              "leftValue": "={{ $('Edit Fields3').item.json.escalation_needed === 'yes'}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2784,
+        1232
+      ],
+      "id": "4e5912f2-1ed5-468f-8a58-781d013df355",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Edit Fields3').item.json.Email }}",
+            "Conversation Status": "Escalated",
+            "Last Contact": "={{ $now.format('yyyy-MM-dd hh:mm:ss') }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Service Interested in",
+              "displayName": "Service Interested in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response Status",
+              "displayName": "Response Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_needed",
+              "displayName": "Follow_up_needed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_at",
+              "displayName": "Created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_sent_at",
+              "displayName": "Follow_up_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Contact",
+              "displayName": "Last Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Conversation Status",
+              "displayName": "Conversation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Booking Intent",
+              "displayName": "Booking Intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Date",
+              "displayName": "Appointment Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Time",
+              "displayName": "Appointment Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3056,
+        1136
+      ],
+      "id": "604c08a1-b963-4204-848b-345024fa9734",
+      "name": "Update row in sheet4",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "phoneNumber": "+2347036455111",
+        "message": "=🚨 Escalation Needed!\nName: {{ $('Edit Fields3').item.json.first_name }} {{ $('Edit Fields3').item.json.last_name }}\nService: {{ $('Edit Fields3').item.json.Service }}\nEmail: {{ $('Edit Fields3').item.json.Email }}\nQuestion: {{ $('Edit Fields3').item.json.reply_content }} \nThe AI could not answer this. Please follow up manually."
+      },
+      "type": "n8n-nodes-syncmate.whatsAuto",
+      "typeVersion": 1,
+      "position": [
+        3056,
+        1360
+      ],
+      "id": "0109d215-0bee-418a-8f21-15b171f689ab",
+      "name": "Send a notification4",
+      "credentials": {
+        "assistroTokenApi": {
+          "id": "oibwRnCMqzatNuPv",
+          "name": "Assistro Token account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3328,
+        1248
+      ],
+      "id": "a028309a-98b1-4724-9b9f-613a22194890",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7da53344-fd44-4159-971e-0edc8a2b2275",
+              "leftValue": "={{ $('Edit Fields3').item.json['sentiment '] === 'frustrated'\n|| $('Edit Fields3').item.json['sentiment '] === 'urgent'}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3536,
+        1248
+      ],
+      "id": "1a821a03-8296-4f94-bb08-e216be9e7be0",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Edit Fields3').item.json.Email }}",
+            "Sentiment": "={{ $('Edit Fields3').item.json['sentiment '] }}",
+            "Last Contact": "={{ $now.format('yyyy-MM-dd hh:mm:ss') }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Service Interested in",
+              "displayName": "Service Interested in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response Status",
+              "displayName": "Response Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_needed",
+              "displayName": "Follow_up_needed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_at",
+              "displayName": "Created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_sent_at",
+              "displayName": "Follow_up_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Contact",
+              "displayName": "Last Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Conversation Status",
+              "displayName": "Conversation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Booking Intent",
+              "displayName": "Booking Intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Date",
+              "displayName": "Appointment Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Time",
+              "displayName": "Appointment Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3824,
+        1104
+      ],
+      "id": "b41dd820-ec0f-465f-bf80-a7c057963cae",
+      "name": "Update row in sheet5",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "phoneNumber": "+2347036455111",
+        "message": "=😟 Frustrated Customer!\nName: {{ $('Edit Fields3').item.json.first_name }} {{ $('Edit Fields3').item.json.last_name }}\nService: {{ $('Edit Fields3').item.json.Service }}\nSentiment: {{ $('Edit Fields3').item.json['sentiment '] }}\nPlease review their conversation urgently."
+      },
+      "type": "n8n-nodes-syncmate.whatsAuto",
+      "typeVersion": 1,
+      "position": [
+        3840,
+        1328
+      ],
+      "id": "5db1fe5b-1173-48fb-a003-d52a34dfd13b",
+      "name": "Send a notification5",
+      "credentials": {
+        "assistroTokenApi": {
+          "id": "oibwRnCMqzatNuPv",
+          "name": "Assistro Token account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4096,
+        1248
+      ],
+      "id": "feb4b40b-de62-41c9-8bf3-b270eab2cca2",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields3').item.json.Email }}",
+        "subject": "=Re: {{ $('Edit Fields3').item.json.reply_subject }}",
+        "emailType": "text",
+        "message": "={{ $('Edit Fields3').item.json.clean_response }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        4320,
+        1248
+      ],
+      "id": "72f9f602-5a5f-47e7-9b64-392f68460cad",
+      "name": "Send a message",
+      "webhookId": "c7af3751-194c-4e77-bd22-58d902fb2255",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qn1tjsNd1vhrjYPF",
+          "name": "Gmail OAuth2 API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 490465066,
+          "mode": "list",
+          "cachedResultName": "Chat History",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=490465066"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Sender": "Customer",
+            "Lead_email": "={{ $('Edit Fields3').item.json.sender_email }}",
+            "Message_content": "={{ $('Edit Fields3').item.json.reply_content }}",
+            "Sentiment": "={{ $('Edit Fields3').item.json['sentiment '] }}",
+            "Booking_intent": "={{ $('Edit Fields3').item.json.booking_detected }}",
+            "Timestamp": "={{ $now.format('yyyy-MM-dd hh:mm:ss') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Lead_email",
+              "displayName": "Lead_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sender",
+              "displayName": "Sender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message_content",
+              "displayName": "Message_content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Booking_intent",
+              "displayName": "Booking_intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4560,
+        1104
+      ],
+      "id": "d8c083e4-30f7-404c-80bc-0aec486c0362",
+      "name": "Append CUSTOMER message to chat history",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 490465066,
+          "mode": "list",
+          "cachedResultName": "Chat History",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=490465066"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead_email": "={{ $('Edit Fields3').item.json.sender_email }}",
+            "Sender": "AI",
+            "Timestamp": "={{ $now.format('yyyy-MM-dd hh:mm:ss') }}",
+            "Message_content": "={{ $('Edit Fields3').item.json.clean_response }}",
+            "Sentiment": "={{ $('Edit Fields3').item.json['sentiment '] }}",
+            "Booking_intent": "={{ $('Edit Fields3').item.json.booking_detected }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Lead_email",
+              "displayName": "Lead_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sender",
+              "displayName": "Sender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message_content",
+              "displayName": "Message_content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Booking_intent",
+              "displayName": "Booking_intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4560,
+        1328
+      ],
+      "id": "d0dc9cde-7f12-4240-953c-2fa49ce73a93",
+      "name": "Append AI response to Chat History",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Edit Fields3').item.json.Email }}",
+            "Sentiment": "={{ $('Edit Fields3').item.json[\"sentiment \"] }}",
+            "Booking Intent": "={{ $('Edit Fields3').item.json.booking_detected }}",
+            "Conversation Status": "={{ $('Edit Fields3').item.json.booking_detected === 'no' &&\n$('Edit Fields3').item.json.escalation_needed === 'no'\n ? 'in conversation'\n:$('Edit Fields3').item.json.booking_detected === 'yes'\n? 'booking requested'\n: 'escalated' }}",
+            "Last Contact": "={{ $now.format('yyyy-MM-DD hh:mm:ss') }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Service Interested in",
+              "displayName": "Service Interested in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response Status",
+              "displayName": "Response Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_needed",
+              "displayName": "Follow_up_needed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_at",
+              "displayName": "Created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_sent_at",
+              "displayName": "Follow_up_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Contact",
+              "displayName": "Last Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Conversation Status",
+              "displayName": "Conversation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Booking Intent",
+              "displayName": "Booking Intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Date",
+              "displayName": "Appointment Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Time",
+              "displayName": "Appointment Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4560,
+        1568
+      ],
+      "id": "e8390a81-c9f5-49f1-b051-104128bb2662",
+      "name": "Update row in sheet6",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "EMAIL RESPONSE + AI AGENT WORKFLOW",
+        "height": 784,
+        "width": 5936
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        1072
+      ],
+      "id": "60f943bc-bae8-4380-a39b-16255af15b36",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "EMAIL TRIGGER WORKFLOW",
+        "height": 416,
+        "width": 880
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3984,
+        592
+      ],
+      "id": "7a5c6401-e7a4-4763-8f49-2a1cb1e3556c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full name": "={{ $json[\"Full name\"] }}",
+            "Phone number": "={{ $json[\"Phone Number\"] }}",
+            "Email": "={{ $json.Email }}",
+            "Service Interested in": "={{ $json[\"Service Interested in\"] }}",
+            "Timestamp": "={{ $now.format('yyyy-MM-dd hh:mm:ss') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Service Interested in",
+              "displayName": "Service Interested in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response Status",
+              "displayName": "Response Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_needed",
+              "displayName": "Follow_up_needed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_at",
+              "displayName": "Created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_sent_at",
+              "displayName": "Follow_up_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Contact",
+              "displayName": "Last Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Conversation Status",
+              "displayName": "Conversation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Booking Intent",
+              "displayName": "Booking Intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Date",
+              "displayName": "Appointment Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Time",
+              "displayName": "Appointment Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -528,
+        608
+      ],
+      "id": "80709ae1-44df-4639-a299-546e107b3537",
+      "name": "Append row in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk",
+          "mode": "list",
+          "cachedResultName": " Haven Wellness Appointment Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pkbWzZFu-N_EZ6nKuoCbKzuge1EYPFIsjyfahHvkDWk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $('Append row in sheet3').item.json.Timestamp }}",
+            "Response Status": "New Lead",
+            "Follow_up_needed": "Yes",
+            "Created_at": "={{ $now.format('yyyy-MM-dd hh:mm:ss') }}",
+            "Email": "={{ $('Append row in sheet3').item.json.Email }}",
+            "Full name": "={{ $('Append row in sheet3').item.json[\"Full name\"] }}",
+            "Phone number": "={{ $('Append row in sheet3').item.json[\"Phone number\"] }}",
+            "Service Interested in": "={{ $('Append row in sheet3').item.json[\"Service Interested in\"] }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Service Interested in",
+              "displayName": "Service Interested in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response Status",
+              "displayName": "Response Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_needed",
+              "displayName": "Follow_up_needed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Created_at",
+              "displayName": "Created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Follow_up_sent_at",
+              "displayName": "Follow_up_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Contact",
+              "displayName": "Last Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Conversation Status",
+              "displayName": "Conversation Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Booking Intent",
+              "displayName": "Booking Intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Date",
+              "displayName": "Appointment Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Appointment Time",
+              "displayName": "Appointment Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        592
+      ],
+      "id": "998a6f37-2036-4bce-9998-639c7432575f",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NHTyBDPZfEYVQe1B",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json.Email }}",
+        "subject": "Appointment Confirmation",
+        "emailType": "text",
+        "message": "=Hello {{ $('Split names').item.json['First name'] }},\n\nThank you for your interest in our facial treatment service. We'll be in touch with you shortly.\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        480
+      ],
+      "id": "b7f224fa-9057-4f0f-886c-5fd5e58f6371",
+      "name": "Email: Facial treatment1",
+      "webhookId": "0d60888b-b6ad-4fa7-83af-b65e313aa534",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qn1tjsNd1vhrjYPF",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json.Email }}",
+        "subject": "Appointment Confirmation",
+        "emailType": "text",
+        "message": "=Hello {{ $('Split names').item.json['First name'] }},\n\nThank you for your interest in our body treatment service. We'll be in touch with you shortly.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        672
+      ],
+      "id": "5bbbf1bb-17a7-414d-8f3f-abec69932433",
+      "name": "Email: Body treatment",
+      "webhookId": "47c3fdda-c54e-480f-9c32-00b7bcad98a6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qn1tjsNd1vhrjYPF",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Full name": "Fave Abiodun",
+          "Phone Number": 8087562342,
+          "Email": "favescents109@gmail.com",
+          "Service Interested in": "Massage therapy",
+          "submittedAt": "2026-03-28T21:25:20.446+01:00",
+          "formMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Gmail Trigger": [
+      {
+        "json": {
+          "id": "19d584b4982a51d7",
+          "threadId": "19d584891f089907",
+          "snippet": "Can you tell me more about the service? On Sat, 4 Apr 2026 at 12:37, &lt;owofadejutoluwani@gmail.com&gt; wrote: Hello Fave, Thank you for your interest in our massage therapy service. We&#39;ll be in",
+          "payload": {
+            "mimeType": "multipart/alternative"
+          },
+          "sizeEstimate": 8072,
+          "historyId": "1700835",
+          "internalDate": "1775302793000",
+          "labels": [
+            {
+              "id": "INBOX",
+              "name": "INBOX"
+            },
+            {
+              "id": "IMPORTANT",
+              "name": "IMPORTANT"
+            },
+            {
+              "id": "CATEGORY_PERSONAL",
+              "name": "CATEGORY_PERSONAL"
+            },
+            {
+              "id": "UNREAD",
+              "name": "UNREAD"
+            }
+          ],
+          "From": "Toluwanimi Priscilla <favescents109@gmail.com>",
+          "Subject": "Re: Appointment Confirmation",
+          "To": "owofadejutoluwani@gmail.com"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Is phone number included?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Is status = new lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message5": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Send a notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Chat History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is phone number included?": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split names": {
+      "main": [
+        [
+          {
+            "node": "Route requests",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route requests": {
+      "main": [
+        [
+          {
+            "node": "Chat With Customer Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email: Massage therapy",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email: Facial treatment1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email: Body treatment",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email: Manicure & Pedicure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is status = new lead": {
+      "main": [
+        [
+          {
+            "node": "Change details like status to sent, follow up needed to no",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Change details like status to sent, follow up needed to no": {
+      "main": [
+        [
+          {
+            "node": "Send a message5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat With Customer Agent": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email: Massage therapy": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email: Manicure & Pedicure": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Send a notification1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Chat History": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send fallback to customer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a notification3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet3": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a notification4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet4": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a notification5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet5": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append CUSTOMER message to chat history",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Append AI response to Chat History",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append CUSTOMER message to chat history": {
+      "main": [
+        []
+      ]
+    },
+    "Append AI response to Chat History": {
+      "main": [
+        []
+      ]
+    },
+    "Append row in sheet3": {
+      "main": [
+        [
+          {
+            "node": "Split names",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email: Facial treatment1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email: Body treatment": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send fallback to customer": {
+      "main": [
+        [
+          {
+            "node": "Send a notification2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a notification2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3736289f-4025-4d0b-8088-1a32f5e2a3b5",
+  "meta": {
+    "instanceId": "0105125aed2401708c1a30717657a876d876aade262a31f29e80a302480d3469"
+  },
+  "id": "wDWqnW6iCv7Fhlxz",
+  "tags": []
+}
