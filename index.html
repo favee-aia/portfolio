@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Favour Owofadeju — AI Automation Specialist</title>
+<meta name="description" content="Favour Owofadeju is an AI Automation Specialist who designs intelligent workflows that streamline processes and improve operational efficiency.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101820;
+    --bg:#FAFAF7;
+    --surface:#FFFFFF;
+    --accent:#2F6F5E;
+    --accent-soft:#E7F0EC;
+    --accent-2:#E3A83C;
+    --line:#E4E1D9;
+    --muted:#5B6570;
+    --dark-surface:#101820;
+    --dark-line:#243039;
+    --radius:14px;
+    --maxw:1120px;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--font-body);
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;margin:0;padding:0;}
+  h1,h2,h3{font-family:var(--font-display);margin:0;line-height:1.15;}
+  p{margin:0;}
+  section{padding:96px 24px;}
+  .wrap{max-width:var(--maxw);margin:0 auto;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:26px;height:1px;background:var(--accent);
+  }
+  .section-head{max-width:640px;margin-bottom:52px;}
+  .section-head h2{font-size:clamp(28px,4vw,38px);}
+  .section-head p{color:var(--muted);margin-top:14px;font-size:16px;}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+
+  /* ---------- NAVBAR ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:1000;
+    background:rgba(250,250,247,.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    padding-top:16px;padding-bottom:16px;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--font-display);font-weight:700;font-size:16px;
+  }
+  .logo-mark{
+    width:34px;height:34px;border-radius:9px;
+    background:var(--ink);color:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-mono);font-size:13px;font-weight:500;
+  }
+  .nav-links{display:flex;gap:34px;align-items:center;}
+  .nav-links a{
+    font-size:14.5px;font-weight:500;color:var(--ink);position:relative;padding:4px 0;
+  }
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--accent);
+    transition:width .25s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    font-family:var(--font-mono);font-size:13px;
+    background:var(--ink);color:var(--bg);
+    padding:10px 18px;border-radius:8px;
+    transition:background .2s ease;
+  }
+  .nav-cta:hover{background:var(--accent);}
+  .hamburger{
+    display:none;flex-direction:column;justify-content:center;gap:5px;
+    width:34px;height:34px;background:none;border:none;cursor:pointer;padding:0;
+  }
+  .hamburger span{
+    display:block;width:22px;height:2px;background:var(--ink);
+    transition:transform .25s ease, opacity .25s ease;
+  }
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .hamburger.open span:nth-child(2){opacity:0;}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding-top:168px;padding-bottom:96px;
+    display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;
+  }
+  .hero h1{font-size:clamp(38px,5.6vw,58px);letter-spacing:-.01em;}
+  .hero .role{
+    font-family:var(--font-mono);color:var(--accent);font-size:16px;margin-top:14px;display:block;
+  }
+  .hero p.lead{margin-top:22px;color:var(--muted);font-size:17px;max-width:520px;}
+  .hero-ctas{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;}
+  .btn{
+    font-family:var(--font-mono);font-size:13.5px;padding:13px 22px;border-radius:9px;
+    border:1px solid var(--ink);transition:all .2s ease;
+  }
+  .btn-solid{background:var(--ink);color:var(--bg);}
+  .btn-solid:hover{background:var(--accent);border-color:var(--accent);}
+  .btn-ghost{background:transparent;color:var(--ink);}
+  .btn-ghost:hover{background:var(--accent-soft);border-color:var(--accent);}
+
+  .hero-visual{
+    background:var(--surface);border:1px solid var(--line);border-radius:20px;
+    padding:28px 20px;position:relative;
+  }
+  .hero-visual .cap{
+    font-family:var(--font-mono);font-size:11.5px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;
+  }
+  .flow-node text{font-family:var(--font-mono);font-size:10.5px;fill:var(--ink);}
+  .flow-node .label{font-size:9px;fill:var(--muted);}
+  .flow-node circle{fill:var(--surface);stroke:var(--line);stroke-width:1.4;}
+  .flow-node.lit circle{stroke:var(--accent);}
+  .flow-path{stroke:var(--line);stroke-width:1.4;fill:none;stroke-dasharray:5 6;}
+  .flow-dot{fill:var(--accent-2);}
+
+  /* ---------- TOOLKIT ---------- */
+  .toolkit-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;
+  }
+  .tool-chip{
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:20px 16px;text-align:center;
+    font-family:var(--font-mono);font-size:14px;
+    transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .tool-chip:hover{
+    transform:translateY(-3px);border-color:var(--accent);
+    box-shadow:0 10px 24px -14px rgba(16,24,32,.25);
+  }
+
+  /* ---------- PROJECTS ---------- */
+  .projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .project-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:30px;display:flex;flex-direction:column;gap:16px;
+    transition:box-shadow .25s ease, transform .25s ease;
+  }
+  .project-card:hover{box-shadow:0 20px 40px -26px rgba(16,24,32,.3);transform:translateY(-4px);}
+  .project-card h3{font-size:19px;}
+  .project-card p{color:var(--muted);font-size:14.8px;}
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;}
+  .tag{
+    font-family:var(--font-mono);font-size:11px;color:var(--accent);
+    background:var(--accent-soft);padding:5px 10px;border-radius:100px;
+  }
+  .project-link{
+    font-family:var(--font-mono);font-size:13px;color:var(--ink);
+    display:inline-flex;align-items:center;gap:6px;margin-top:4px;
+  }
+  .project-link .arrow{transition:transform .2s ease;}
+  .project-link:hover .arrow{transform:translateX(3px);}
+
+  /* ---------- DEMO ---------- */
+  .demo{background:var(--dark-surface);color:#EDEFEF;}
+  .demo .eyebrow{color:var(--accent-2);}
+  .demo .eyebrow::before{background:var(--accent-2);}
+  .demo .section-head p{color:#9AA5AC;}
+  .calc-panel{
+    display:grid;grid-template-columns:1fr 1fr;gap:0;
+    border:1px solid var(--dark-line);border-radius:18px;overflow:hidden;
+  }
+  .calc-inputs, .calc-output{padding:34px;}
+  .calc-inputs{border-right:1px solid var(--dark-line);}
+  .field{margin-bottom:20px;}
+  .field label{
+    display:block;font-family:var(--font-mono);font-size:12px;color:#9AA5AC;
+    margin-bottom:8px;letter-spacing:.03em;
+  }
+  .field input[type=text], .field input[type=number]{
+    width:100%;background:#171F27;border:1px solid var(--dark-line);color:#EDEFEF;
+    border-radius:8px;padding:11px 12px;font-family:var(--font-body);font-size:14.5px;
+  }
+  .field input:focus{outline:2px solid var(--accent-2);outline-offset:1px;}
+  .range-row{display:flex;align-items:center;gap:12px;}
+  .range-row input[type=range]{flex:1;accent-color:var(--accent-2);}
+  .range-val{font-family:var(--font-mono);font-size:13px;color:var(--accent-2);min-width:38px;text-align:right;}
+  .calc-btn{
+    width:100%;margin-top:6px;background:var(--accent-2);color:#171208;border:none;
+    padding:13px;border-radius:8px;font-family:var(--font-mono);font-size:13.5px;font-weight:500;
+    cursor:pointer;transition:filter .2s ease;
+  }
+  .calc-btn:hover{filter:brightness(1.08);}
+  .calc-output{background:#0D1319;}
+  .result-line{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--dark-line);}
+  .result-line:last-of-type{border-bottom:none;}
+  .result-line .rl-label{font-size:13.5px;color:#9AA5AC;}
+  .result-line .rl-val{font-family:var(--font-mono);font-size:22px;color:#EDEFEF;}
+  .result-line .rl-val.accent{color:var(--accent-2);}
+  .demo-note{font-size:12px;color:#6C7680;margin-top:16px;line-height:1.6;}
+  .mini-flow{display:flex;justify-content:space-between;margin-top:24px;position:relative;}
+  .mini-flow::before{
+    content:"";position:absolute;top:14px;left:14px;right:14px;height:1px;
+    background:var(--dark-line);z-index:0;
+  }
+  .mini-node{
+    position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;
+  }
+  .mini-node .dot{
+    width:12px;height:12px;border-radius:50%;background:#171F27;border:1.5px solid var(--dark-line);
+    transition:all .3s ease;
+  }
+  .mini-node.active .dot{background:var(--accent-2);border-color:var(--accent-2);box-shadow:0 0 0 5px rgba(227,168,60,.15);}
+  .mini-node span{font-family:var(--font-mono);font-size:10px;color:#6C7680;text-align:center;}
+  .mini-node.active span{color:var(--accent-2);}
+
+  /* ---------- CONTACT ---------- */
+  .contact-wrap{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:start;}
+  .contact-info p{color:var(--muted);font-size:15.5px;margin-top:14px;}
+  .contact-list{margin-top:26px;display:flex;flex-direction:column;gap:12px;}
+  .contact-list a{
+    font-family:var(--font-mono);font-size:14px;display:flex;gap:10px;align-items:center;
+    color:var(--ink);width:fit-content;border-bottom:1px solid transparent;
+  }
+  .contact-list a:hover{border-color:var(--accent);color:var(--accent);}
+  form.contact-form{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:30px;display:flex;flex-direction:column;gap:18px;
+  }
+  .contact-form label{font-family:var(--font-mono);font-size:12px;color:var(--muted);margin-bottom:7px;display:block;}
+  .contact-form input, .contact-form textarea{
+    width:100%;border:1px solid var(--line);border-radius:8px;padding:12px 13px;
+    font-family:var(--font-body);font-size:14.5px;background:#FCFCFA;color:var(--ink);
+  }
+  .contact-form textarea{min-height:130px;resize:vertical;}
+  .contact-form input:focus, .contact-form textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  .form-status{font-family:var(--font-mono);font-size:13px;color:var(--accent);min-height:18px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--ink);color:#CDD3D6;padding:56px 24px 28px;}
+  .footer-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;}
+  .footer-brand{font-family:var(--font-display);font-weight:700;font-size:18px;color:#fff;}
+  .footer-brand p{font-family:var(--font-body);font-weight:400;font-size:13.5px;color:#8B959B;margin-top:8px;max-width:260px;}
+  .social-links{display:flex;gap:18px;}
+  .social-links a{
+    font-family:var(--font-mono);font-size:13px;color:#CDD3D6;padding-bottom:2px;border-bottom:1px solid transparent;
+  }
+  .social-links a:hover{color:var(--accent-2);border-color:var(--accent-2);}
+  .footer-bottom{
+    margin-top:44px;padding-top:22px;border-top:1px solid #232B32;
+    font-family:var(--font-mono);font-size:11.5px;color:#6C7680;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:860px){
+    .nav-links{
+      position:fixed;top:67px;left:0;right:0;bottom:0;
+      background:var(--bg);flex-direction:column;justify-content:flex-start;
+      padding:36px 28px;gap:26px;
+      transform:translateX(100%);transition:transform .3s ease;
+    }
+    .nav-links.open{transform:translateX(0);}
+    .nav-links a{font-size:18px;}
+    .hamburger{display:flex;}
+    .hero{grid-template-columns:1fr;padding-top:140px;}
+    .projects-grid{grid-template-columns:1fr;}
+    .calc-panel{grid-template-columns:1fr;}
+    .calc-inputs{border-right:none;border-bottom:1px solid var(--dark-line);}
+    .contact-wrap{grid-template-columns:1fr;}
+    section{padding:72px 20px;}
+  }
+  @media(prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="logo"><span class="logo-mark">FO</span> Favour Owofadeju</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about" class="nav-link">About</a></li>
+      <li><a href="#toolkit" class="nav-link">Toolkit</a></li>
+      <li><a href="#projects" class="nav-link">Projects</a></li>
+      <li><a href="#demo" class="nav-link">Demo</a></li>
+      <li><a href="#contact" class="nav-cta">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- HERO / ABOUT -->
+<section class="hero" id="about">
+  <div>
+    <span class="eyebrow">AI Automation Specialist</span>
+    <h1>Favour Owofadeju</h1>
+    <span class="role">Designing workflows that do the repetitive work, so people don't have to.</span>
+    <p class="lead">As an AI Automation Specialist, I design intelligent workflows that streamline processes, eliminate repetitive tasks, and improve operational efficiency. My background in clinical practice as a pharmacist has strengthened my analytical thinking, attention to detail, and problem-solving skills, which I now apply to building reliable automation solutions. I enjoy creating systems that help businesses save time, make smarter decisions, and focus on what matters most.</p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn btn-solid">View projects</a>
+      <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      <a href="cv/Favour-Owofadeju-CV.pdf" class="btn btn-ghost" download>Download CV ↓</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="cap">// a booking request, automated</div>
+    <svg viewBox="0 0 420 220" width="100%" height="220" role="img" aria-label="Diagram showing a request moving through trigger, AI processing, routing and confirmation steps">
+      <path class="flow-path" d="M55,40 L55,180 L365,180 L365,40" />
+      <path class="flow-path" d="M55,110 L365,110" />
+      <circle class="flow-dot" r="3.5">
+        <animateMotion dur="6s" repeatCount="indefinite"
+          path="M55,40 L55,180 L365,180 L365,40 Z" />
+      </circle>
+
+      <g class="flow-node lit">
+        <circle cx="55" cy="40" r="22"/>
+        <text x="55" y="44" text-anchor="middle">1</text>
+        <text class="label" x="55" y="76" text-anchor="middle">Form submitted</text>
+      </g>
+      <g class="flow-node">
+        <circle cx="55" cy="180" r="22"/>
+        <text x="55" y="184" text-anchor="middle">2</text>
+        <text class="label" x="55" y="212" text-anchor="middle">AI classifies</text>
+      </g>
+      <g class="flow-node">
+        <circle cx="365" cy="180" r="22"/>
+        <text x="365" y="184" text-anchor="middle">3</text>
+        <text class="label" x="365" y="212" text-anchor="middle">Routed to team</text>
+      </g>
+      <g class="flow-node">
+        <circle cx="365" cy="40" r="22"/>
+        <text x="365" y="44" text-anchor="middle">4</text>
+        <text class="label" x="365" y="76" text-anchor="middle">Confirmation sent</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- TOOLKIT -->
+<section id="toolkit">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Toolkit</span>
+      <h2>The stack behind the systems</h2>
+      <p>Tools I reach for to design, connect, and ship automation that holds up in production.</p>
+    </div>
+    <div class="toolkit-grid">
+      <div class="tool-chip">n8n</div>
+      <div class="tool-chip">Zapier</div>
+      <div class="tool-chip">Make.com</div>
+      <div class="tool-chip">Airtable</div>
+      <div class="tool-chip">Lovable</div>
+      <div class="tool-chip">Vapi</div>
+      <div class="tool-chip">Supabase</div>
+      <div class="tool-chip">Softr</div>
+      <div class="tool-chip">Pinecone</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" style="background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Projects</span>
+      <h2>Systems I've built end to end</h2>
+      <p>Four workflows, four different problems — booking, triage, customer support, and clinic operations.</p>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <h3>Email Classification System</h3>
+        <p>An automated system that reads incoming emails, classifies them using GPT-4o-mini, and routes each one to the correct department accordingly — cutting down manual sorting and response delays.</p>
+        <div class="tag-row">
+          <span class="tag">GPT-4o-mini</span><span class="tag">Automation</span><span class="tag">Routing</span>
+        </div>
+        <a href="https://www.loom.com/share/dc4ab34c4925410b82ae5c91151b6fe3" class="project-link" target="_blank" rel="noopener">View project <span class="arrow">→</span></a>
+      </div>
+
+      <div class="project-card">
+        <h3>Fave Scents RAG AI Assistant</h3>
+        <p>A RAG-powered WhatsApp chatbot built with n8n, Pinecone, Gemini, Twilio, Airtable, and Tally Forms. It delivers instant customer support, logs conversations, and seamlessly hands complex inquiries over to a human agent.</p>
+        <div class="tag-row">
+          <span class="tag">n8n</span><span class="tag">Pinecone</span><span class="tag">Gemini</span><span class="tag">Twilio</span><span class="tag">Airtable</span>
+        </div>
+        <a href="https://www.loom.com/share/d17624b2297b41ff81f1fd474cc56e98" class="project-link" target="_blank" rel="noopener">View project <span class="arrow">→</span></a>
+      </div>
+
+      <div class="project-card">
+        <h3>ClinicFlow</h3>
+        <p>A comprehensive patient management and communication system built for a private clinic. Developed using n8n, Supabase, GreenAPI, Gemini AI, and Lovable, it automates appointment scheduling, patient communication, clinical workflows, and management processes for patients, staff, and administrators alike.</p>
+        <div class="tag-row">
+          <span class="tag">n8n</span><span class="tag">Supabase</span><span class="tag">GreenAPI</span><span class="tag">Lovable</span>
+        </div>
+        <a href="https://clinic-flow-patient.lovable.app" class="project-link" target="_blank" rel="noopener">View project <span class="arrow">→</span></a>
+      </div>
+
+      <div class="project-card">
+        <h3>Wellcare Pharmacy Appointment Automation</h3>
+        <p>An end-to-end appointment management workflow built with Zapier, Google Forms, Google Calendar, Google Sheets, and Gmail. It automates booking, department routing, confirmations, rescheduling, reminder emails, and appointment tracking, creating a seamless scheduling experience for both patients and staff.</p>
+        <div class="tag-row">
+          <span class="tag">Zapier</span><span class="tag">Google Forms</span><span class="tag">Google Calendar</span><span class="tag">Gmail</span>
+        </div>
+        <a href="#" class="project-link">View project <span class="arrow">→</span></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE DEMO -->
+<section class="demo" id="demo">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Try it</span>
+      <h2>Automation time-savings calculator</h2>
+      <p>Enter a task your team still does by hand and see roughly what automating it would give back in hours — and, if you like, in cost.</p>
+    </div>
+
+    <div class="calc-panel">
+      <div class="calc-inputs">
+        <div class="field">
+          <label for="taskName">Task being automated</label>
+          <input type="text" id="taskName" placeholder="e.g. Booking confirmations" value="Booking confirmations">
+        </div>
+        <div class="field">
+          <label for="hoursWeek">Hours spent on it per week</label>
+          <input type="number" id="hoursWeek" min="0" step="0.5" value="6">
+        </div>
+        <div class="field">
+          <label for="teamSize">People currently doing this task</label>
+          <input type="number" id="teamSize" min="1" step="1" value="1">
+        </div>
+        <div class="field">
+          <label for="hourlyCost">Hourly cost of that time (optional, $)</label>
+          <input type="number" id="hourlyCost" min="0" step="1" value="15">
+        </div>
+        <div class="field">
+          <label for="automationPct">Share of the task automation can take over: <span class="range-val" id="pctVal">80%</span></label>
+          <div class="range-row">
+            <input type="range" id="automationPct" min="20" max="95" value="80">
+          </div>
+        </div>
+        <button class="calc-btn" id="calcBtn">Calculate savings</button>
+
+        <div class="mini-flow" id="miniFlow">
+          <div class="mini-node" data-step="1"><div class="dot"></div><span>Input</span></div>
+          <div class="mini-node" data-step="2"><div class="dot"></div><span>Automate</span></div>
+          <div class="mini-node" data-step="3"><div class="dot"></div><span>Calculate</span></div>
+          <div class="mini-node" data-step="4"><div class="dot"></div><span>Result</span></div>
+        </div>
+      </div>
+
+      <div class="calc-output">
+        <div class="result-line">
+          <span class="rl-label">Hours saved / month</span>
+          <span class="rl-val accent" id="outMonthly">—</span>
+        </div>
+        <div class="result-line">
+          <span class="rl-label">Hours saved / year</span>
+          <span class="rl-val" id="outYearly">—</span>
+        </div>
+        <div class="result-line">
+          <span class="rl-label">Roughly in workdays / year</span>
+          <span class="rl-val" id="outWorkdays">—</span>
+        </div>
+        <div class="result-line">
+          <span class="rl-label">Estimated cost saved / month</span>
+          <span class="rl-val accent" id="outCost">—</span>
+        </div>
+        <p class="demo-note">This is a quick estimate, not a quote — real numbers depend on the workflow. It assumes the automated share of the task runs without ongoing manual input, based on the percentage you set above.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap contact-wrap">
+    <div class="contact-info">
+      <span class="eyebrow">Contact</span>
+      <h2>Let's automate something</h2>
+      <p>If a process at your business is still manual, repetitive, or eating up hours it doesn't need to — tell me about it. I'll reply with how I'd approach it.</p>
+      <div class="contact-list">
+        <a href="mailto:hello@favourowofadeju.com">✉ hello@favourowofadeju.com</a>
+        <a href="https://www.linkedin.com/in/favourowofadeju" target="_blank" rel="noopener">in LinkedIn</a>
+        <a href="#">↗ Upwork profile</a>
+      </div>
+    </div>
+
+    <form class="contact-form" id="contactForm" action="https://formspree.io/f/mlgqvolp" method="POST">
+      <div>
+        <label for="cf-name">Name</label>
+        <input type="text" id="cf-name" name="name" required>
+      </div>
+      <div>
+        <label for="cf-email">Email</label>
+        <input type="email" id="cf-email" name="email" required>
+      </div>
+      <div>
+        <label for="cf-message">What do you need automated?</label>
+        <textarea id="cf-message" name="message" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-solid" id="submitBtn" style="justify-self:flex-start;">Send message</button>
+      <span class="form-status" id="formStatus"></span>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-top">
+    <div class="footer-brand">
+      Favour Owofadeju
+      <p>AI Automation Specialist building reliable systems out of repetitive work.</p>
+    </div>
+    <div class="social-links">
+      <a href="https://www.linkedin.com/in/favourowofadeju" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#">Upwork</a>
+      <a href="#">GitHub</a>
+      <a href="mailto:hello@favourowofadeju.com">Email</a>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© <span id="year"></span> Favour Owofadeju</span>
+    <span>Built with n8n habits and HTML</span>
+  </div>
+</footer>
+
+<script>
+  // Footer year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+
+  document.querySelectorAll('.nav-link, .nav-cta').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Range slider live value
+  const pctInput = document.getElementById('automationPct');
+  const pctVal = document.getElementById('pctVal');
+  pctInput.addEventListener('input', () => {
+    pctVal.textContent = pctInput.value + '%';
+  });
+
+  // Automation savings calculator
+  const calcBtn = document.getElementById('calcBtn');
+  const miniNodes = document.querySelectorAll('.mini-node');
+
+  function formatNumber(n){
+    return n.toLocaleString('en-US', { maximumFractionDigits: 1 });
+  }
+
+  function runFlowAnimation(){
+    miniNodes.forEach(n => n.classList.remove('active'));
+    miniNodes.forEach((node, i) => {
+      setTimeout(() => node.classList.add('active'), i * 220);
+    });
+  }
+
+  function calculate(){
+    const hoursWeek = parseFloat(document.getElementById('hoursWeek').value) || 0;
+    const teamSize = parseFloat(document.getElementById('teamSize').value) || 1;
+    const hourlyCost = parseFloat(document.getElementById('hourlyCost').value) || 0;
+    const pct = parseFloat(pctInput.value) / 100;
+
+    const weeklyHoursSaved = hoursWeek * teamSize * pct;
+    const monthlyHoursSaved = weeklyHoursSaved * 4.33;
+    const yearlyHoursSaved = weeklyHoursSaved * 52;
+    const workdaysSaved = yearlyHoursSaved / 8;
+    const monthlyCostSaved = monthlyHoursSaved * hourlyCost;
+
+    document.getElementById('outMonthly').textContent = formatNumber(monthlyHoursSaved) + ' hrs';
+    document.getElementById('outYearly').textContent = formatNumber(yearlyHoursSaved) + ' hrs';
+    document.getElementById('outWorkdays').textContent = formatNumber(workdaysSaved) + ' days';
+    document.getElementById('outCost').textContent = hourlyCost > 0
+      ? '$' + formatNumber(monthlyCostSaved)
+      : '—';
+
+    runFlowAnimation();
+  }
+
+  calcBtn.addEventListener('click', calculate);
+  // Run once on load with the default values so the panel isn't empty
+  calculate();
+
+  // Contact form — submits to Formspree
+  const contactForm = document.getElementById('contactForm');
+  const formStatus = document.getElementById('formStatus');
+  const submitBtn = document.getElementById('submitBtn');
+
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('cf-name').value.trim();
+    const email = document.getElementById('cf-email').value.trim();
+    const message = document.getElementById('cf-message').value.trim();
+
+    if(!name || !email || !message){
+      formStatus.textContent = 'Please fill in every field.';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    formStatus.textContent = 'Sending…';
+
+    try {
+      const response = await fetch(contactForm.action, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        formStatus.textContent = 'Thanks — your message is on its way. I\'ll get back to you soon.';
+        contactForm.reset();
+      } else {
+        formStatus.textContent = 'Something went wrong. Please try again or email hello@favourowofadeju.com directly.';
+      }
+    } catch (err) {
+      formStatus.textContent = 'Network error — please try again or email hello@favourowofadeju.com directly.';
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
