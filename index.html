@@ -306,6 +306,27 @@
   .tool-chip:nth-child(3n+2):hover .tool-glyph{background:var(--accent-2);color:#171208;}
   html[data-theme="dark"] .tool-chip:nth-child(3n+2) .tool-glyph{color:var(--accent-2);}
 
+  /* ---------- EXPERIENCE / EDUCATION ---------- */
+  .exp-edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;}
+  .exp-edu-col h3.col-title{
+    font-family:var(--font-mono);font-size:12.5px;text-transform:uppercase;letter-spacing:.1em;
+    color:var(--muted);margin-bottom:24px;
+  }
+  .timeline{position:relative;padding-left:26px;}
+  .timeline::before{
+    content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--line);
+  }
+  .timeline-item{position:relative;padding-bottom:32px;}
+  .timeline-item:last-child{padding-bottom:0;}
+  .timeline-dot{
+    position:absolute;left:-26px;top:4px;width:11px;height:11px;border-radius:50%;
+    background:var(--surface);border:2px solid var(--accent);
+  }
+  .timeline-date{font-family:var(--font-mono);font-size:12px;color:var(--accent);letter-spacing:.04em;}
+  .timeline-content h4{font-family:var(--font-display);font-size:16.5px;margin-top:6px;}
+  .timeline-org{font-family:var(--font-mono);font-size:12.5px;color:var(--muted);margin-top:4px;}
+  .timeline-content p:not(.timeline-org){color:var(--muted);font-size:14.5px;margin-top:10px;max-width:480px;}
+
   /* ---------- PROJECTS ---------- */
   .projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
   .project-card{
@@ -477,6 +498,7 @@
     .calc-panel{grid-template-columns:minmax(0,1fr);}
     .calc-inputs{border-right:none;border-bottom:1px solid var(--dark-line);}
     .contact-wrap{grid-template-columns:minmax(0,1fr);}
+    .exp-edu-grid{grid-template-columns:minmax(0,1fr);gap:40px;}
     section{padding:72px 20px;}
     .to-top{right:16px;bottom:16px;}
   }
@@ -496,6 +518,7 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="#about" class="nav-link">About</a></li>
       <li><a href="#toolkit" class="nav-link">Toolkit</a></li>
+      <li><a href="#experience" class="nav-link">Experience</a></li>
       <li><a href="#projects" class="nav-link">Projects</a></li>
       <li><a href="#demo" class="nav-link">Demo</a></li>
       <li><a href="#contact" class="nav-cta">Contact</a></li>
@@ -586,6 +609,54 @@
       <div class="tool-chip stagger-item"><span class="tool-glyph">Sb</span>Supabase</div>
       <div class="tool-chip stagger-item"><span class="tool-glyph">Sf</span>Softr</div>
       <div class="tool-chip stagger-item"><span class="tool-glyph">Pc</span>Pinecone</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE & EDUCATION -->
+<section id="experience" style="background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Experience &amp; Education</span>
+      <h2>The path behind the practice</h2>
+      <p>Freelance automation work, backed by a pharmacy degree and a dedicated automation programme.</p>
+    </div>
+    <div class="exp-edu-grid reveal">
+      <div class="exp-edu-col">
+        <h3 class="col-title">Experience</h3>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <span class="timeline-date">Feb 2026 — Present</span>
+              <h4>AI Automation Specialist, Freelance</h4>
+              <p class="timeline-org">Self-employed · Remote</p>
+              <p>Designs and ships multi-step automation workflows in n8n and Zapier, connecting CRMs, messaging platforms, and AI models — owning everything from requirements gathering to client demo documentation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="exp-edu-col">
+        <h3 class="col-title">Education</h3>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <span class="timeline-date">2026</span>
+              <h4>AI &amp; Automation Programme</h4>
+              <p class="timeline-org">TS Academy</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <span class="timeline-date">2024</span>
+              <h4>B.Pharm</h4>
+              <p class="timeline-org">Obafemi Awolowo University · Graduated with Distinction</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -718,7 +789,7 @@
       <h2>Let's automate something</h2>
       <p>If a process at your business is still manual, repetitive, or eating up hours it doesn't need to — tell me about it. I'll reply with how I'd approach it.</p>
       <div class="contact-list">
-        <a href="mailto:hello@favourowofadeju.com">✉ hello@favourowofadeju.com</a>
+        <a href="mailto:owofadejutoluwani@gmail.com">✉ owofadejutoluwani@gmail.com</a>
         <a href="https://www.linkedin.com/in/favourowofadeju" target="_blank" rel="noopener">in LinkedIn</a>
       </div>
     </div>
@@ -751,7 +822,7 @@
     <div class="social-links">
       <a href="https://www.linkedin.com/in/favourowofadeju" target="_blank" rel="noopener">LinkedIn</a>
       <a href="#">GitHub</a>
-      <a href="mailto:hello@favourowofadeju.com">Email</a>
+      <a href="mailto:owofadejutoluwani@gmail.com">Email</a>
     </div>
   </div>
   <div class="wrap footer-bottom">
@@ -962,10 +1033,10 @@
         formStatus.textContent = 'Thanks — your message is on its way. I\'ll get back to you soon.';
         contactForm.reset();
       } else {
-        formStatus.textContent = 'Something went wrong. Please try again or email hello@favourowofadeju.com directly.';
+        formStatus.textContent = 'Something went wrong. Please try again or email owofadejutoluwani@gmail.com directly.';
       }
     } catch (err) {
-      formStatus.textContent = 'Network error — please try again or email hello@favourowofadeju.com directly.';
+      formStatus.textContent = 'Network error — please try again or email owofadejutoluwani@gmail.com directly.';
     } finally {
       submitBtn.disabled = false;
     }
