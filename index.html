@@ -189,7 +189,7 @@
   /* ---------- HERO ---------- */
   .hero{
     padding-top:168px;padding-bottom:96px;
-    display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;
+    display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center;
     overflow:hidden;
   }
   .hero-blob{
@@ -209,7 +209,7 @@
     transition:opacity .4s ease;
   }
   .hero:hover .hero-spotlight{opacity:1;}
-  .hero > *{position:relative;z-index:1;}
+  .hero > *{position:relative;z-index:1;min-width:0;}
   .status-badge{
     display:inline-flex;align-items:center;gap:8px;
     font-family:var(--font-mono);font-size:12px;color:var(--muted);
@@ -305,23 +305,6 @@
   .tool-chip:nth-child(3n+2) .tool-glyph{background:rgba(var(--accent-2-rgb),.16);color:#B9822A;}
   .tool-chip:nth-child(3n+2):hover .tool-glyph{background:var(--accent-2);color:#171208;}
   html[data-theme="dark"] .tool-chip:nth-child(3n+2) .tool-glyph{color:var(--accent-2);}
-
-  /* ---------- EXPERIENCE / TIMELINE ---------- */
-  .timeline{position:relative;padding-left:30px;max-width:680px;}
-  .timeline::before{
-    content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;
-    background:linear-gradient(var(--line),var(--line));
-  }
-  .timeline-item{position:relative;padding-bottom:38px;}
-  .timeline-item:last-child{padding-bottom:0;}
-  .timeline-dot{
-    position:absolute;left:-30px;top:4px;width:11px;height:11px;border-radius:50%;
-    background:var(--surface);border:2px solid var(--accent);
-  }
-  .timeline-date{font-family:var(--font-mono);font-size:12px;color:var(--accent);letter-spacing:.04em;}
-  .timeline-content h3{font-size:17px;margin-top:6px;}
-  .timeline-org{font-family:var(--font-mono);font-size:12.5px;color:var(--muted);margin-top:4px;}
-  .timeline-content p:not(.timeline-org){color:var(--muted);font-size:14.5px;margin-top:10px;max-width:560px;}
 
   /* ---------- PROJECTS ---------- */
   .projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
@@ -488,12 +471,12 @@
     .nav-links a{font-size:18px;}
     .nav-links a::after{display:none;}
     .hamburger{display:flex;}
-    .hero{grid-template-columns:1fr;padding-top:140px;}
+    .hero{grid-template-columns:minmax(0,1fr);padding-top:140px;}
     .hero-stats{gap:26px;}
-    .projects-grid{grid-template-columns:1fr;}
-    .calc-panel{grid-template-columns:1fr;}
+    .projects-grid{grid-template-columns:minmax(0,1fr);}
+    .calc-panel{grid-template-columns:minmax(0,1fr);}
     .calc-inputs{border-right:none;border-bottom:1px solid var(--dark-line);}
-    .contact-wrap{grid-template-columns:1fr;}
+    .contact-wrap{grid-template-columns:minmax(0,1fr);}
     section{padding:72px 20px;}
     .to-top{right:16px;bottom:16px;}
   }
@@ -513,7 +496,6 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="#about" class="nav-link">About</a></li>
       <li><a href="#toolkit" class="nav-link">Toolkit</a></li>
-      <li><a href="#experience" class="nav-link">Experience</a></li>
       <li><a href="#projects" class="nav-link">Projects</a></li>
       <li><a href="#demo" class="nav-link">Demo</a></li>
       <li><a href="#contact" class="nav-cta">Contact</a></li>
@@ -549,7 +531,6 @@
     <div class="hero-stats">
       <div class="hero-stat"><div class="num">4</div><div class="label">Systems shipped</div></div>
       <div class="hero-stat"><div class="num">9</div><div class="label">Tools &amp; platforms</div></div>
-      <div class="hero-stat"><div class="num">Feb 2026</div><div class="label">Freelancing since</div></div>
     </div>
   </div>
 
@@ -605,45 +586,6 @@
       <div class="tool-chip stagger-item"><span class="tool-glyph">Sb</span>Supabase</div>
       <div class="tool-chip stagger-item"><span class="tool-glyph">Sf</span>Softr</div>
       <div class="tool-chip stagger-item"><span class="tool-glyph">Pc</span>Pinecone</div>
-    </div>
-  </div>
-</section>
-
-<!-- EXPERIENCE & EDUCATION -->
-<section id="experience">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">Experience</span>
-      <h2>Where the skill set comes from</h2>
-      <p>A pharmacy background and a year of freelance automation work, feeding into the same habit: check the details, then remove the friction.</p>
-    </div>
-    <div class="timeline reveal-stagger reveal">
-      <div class="timeline-item stagger-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <span class="timeline-date">Feb 2026 — Present</span>
-          <h3>AI Automation Specialist, Freelance</h3>
-          <p class="timeline-org">Self-employed · Remote</p>
-          <p>Designs and ships multi-step automation workflows in n8n and Zapier, connecting CRMs, messaging platforms, and AI models — owning everything from requirements gathering to client demo documentation.</p>
-        </div>
-      </div>
-      <div class="timeline-item stagger-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <span class="timeline-date">Mar 2025 — Feb 2026</span>
-          <h3>Intern Pharmacist</h3>
-          <p class="timeline-org">Obafemi Awolowo University Teaching Hospital Complex · Osun, Nigeria</p>
-          <p>Reviewed prescriptions for clinical accuracy, supported medication therapy management, and took part in multidisciplinary clinical rounds — the same attention to detail now applied to workflow design.</p>
-        </div>
-      </div>
-      <div class="timeline-item stagger-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-content">
-          <span class="timeline-date">2024</span>
-          <h3>B.Pharm, Obafemi Awolowo University</h3>
-          <p class="timeline-org">Graduated with Distinction · Best Dissertation award</p>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -778,7 +720,6 @@
       <div class="contact-list">
         <a href="mailto:hello@favourowofadeju.com">✉ hello@favourowofadeju.com</a>
         <a href="https://www.linkedin.com/in/favourowofadeju" target="_blank" rel="noopener">in LinkedIn</a>
-        <a href="#">↗ Upwork profile</a>
       </div>
     </div>
 
@@ -809,7 +750,6 @@
     </div>
     <div class="social-links">
       <a href="https://www.linkedin.com/in/favourowofadeju" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="#">Upwork</a>
       <a href="#">GitHub</a>
       <a href="mailto:hello@favourowofadeju.com">Email</a>
     </div>
